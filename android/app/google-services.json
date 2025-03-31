@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "199192207383",
+    "firebase_url": "https://hamkorbot-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "hamkorbot",
+    "storage_bucket": "hamkorbot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199192207383:android:9bb0685347fe1accaafc52",
+        "android_client_info": {
+          "package_name": "com.example.melo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199192207383-qag06tjo0r4c9d9gjcoijpuoln9trf03.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCc7DGCX0mYy3AvO3A6e0Znzzr-e6__VPw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199192207383-qag06tjo0r4c9d9gjcoijpuoln9trf03.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "199192207383-1ua4537gf6mdppat9l4l32l977ghjnaj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.udemy"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
