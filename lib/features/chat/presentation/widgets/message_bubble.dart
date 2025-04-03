@@ -1,9 +1,9 @@
-// message_bubble.dart
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:melo/core/theme/colors.dart';
 import 'package:melo/core/theme/text_styles.dart';
+import '../../../../core/widgets/shimmer.dart';
 import 'full_img_view.dart';
 
 class MessageBubble extends StatefulWidget {
@@ -99,11 +99,13 @@ class _MessageBubbleState extends State<MessageBubble> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final bgColor = widget.isMine
         ? AppColors.primary
         : isDark
         ? AppColors.darkCard
         : AppColors.lightCard;
+
     final textColor = widget.isMine
         ? Colors.white
         : isDark
@@ -146,11 +148,13 @@ class _MessageBubbleState extends State<MessageBubble> {
                     fit: BoxFit.cover,
                     loadingBuilder: (context, child, loadingProgress) {
                       if (loadingProgress == null) return child;
-                      return Container(
-                        width: 200,
+                      return const ReusableShimmerTile(
+                        avatarSize: 0,
+                        titleWidth: double.infinity,
+                        subtitleWidth: 100,
                         height: 200,
-                        color: Colors.grey.shade300,
-                        child: const Center(child: CircularProgressIndicator()),
+                        radius: 14,
+                        showTrailing: false,
                       );
                     },
                     errorBuilder: (context, error, stackTrace) {
@@ -165,8 +169,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                 ),
               ),
               const SizedBox(height: 8),
-            ]
-            else if (widget.isVoice && widget.audioUrl != null) ...[
+            ] else if (widget.isVoice && widget.audioUrl != null) ...[
               Row(
                 children: [
                   IconButton(
@@ -180,7 +183,9 @@ class _MessageBubbleState extends State<MessageBubble> {
                   Expanded(
                     child: Slider(
                       min: 0,
-                      max: _duration.inMilliseconds > 0 ? _duration.inMilliseconds.toDouble() : 1,
+                      max: _duration.inMilliseconds > 0
+                          ? _duration.inMilliseconds.toDouble()
+                          : 1,
                       value: _position.inMilliseconds
                           .clamp(0, _duration.inMilliseconds)
                           .toDouble(),

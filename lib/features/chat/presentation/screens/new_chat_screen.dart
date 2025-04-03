@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_gradients.dart';
-import '../../../../core/widgets/loading_indicator.dart';
+import '../../../../core/widgets/shimmer.dart';
 import '../../../auth/presentation/providers/auth_user_provider.dart';
-import '../../domain/entities/chat_entity.dart';
 import '../../domain/entities/user_entity.dart';
 import '../provider/chat_providers.dart';
 import '../provider/user_repository_provider.dart';
@@ -28,7 +27,7 @@ class NewChatScreen extends ConsumerWidget {
         decoration: const BoxDecoration(gradient: AppGradients.main),
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: usersAsync.when(
-          loading: () => const LoadingIndicator(),
+          loading: () => const ReusableShimmerTile(),
           error: (e, _) => Center(child: Text("Xatolik: $e")),
           data: (List<UserEntity> users) {
             final filtered = users.where((u) => u.uid != currentUser?.uid).toList();
@@ -45,6 +44,7 @@ class NewChatScreen extends ConsumerWidget {
                       currentUserId: currentUser!.uid,
                       otherUser: selectedUser,
                     );
+                    // ignore: use_build_context_synchronously
                     context.push(ChatDetailScreen.routeName, extra: chat);
                   },
                 );

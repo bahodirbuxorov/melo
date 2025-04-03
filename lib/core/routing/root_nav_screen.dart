@@ -1,18 +1,17 @@
-// lib/core/routing/root_nav_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../features/profile/presentation/screens/profile_screen.dart';
-import '../theme/colors.dart';
-import 'bottom_nav_controller.dart';
-import '../../features/chat/presentation/screens/chat_list_screen.dart';
+import 'package:iconly/iconly.dart';
 
+import '../../features/chat/presentation/screens/chat_list_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
+import 'bottom_nav_controller.dart';
 
 class RootNavScreen extends ConsumerWidget {
   const RootNavScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final index = ref.watch(bottomNavIndexProvider);
+    final currentIndex = ref.watch(bottomNavIndexProvider);
 
     final screens = [
       const ChatListScreen(),
@@ -20,19 +19,23 @@ class RootNavScreen extends ConsumerWidget {
     ];
 
     return Scaffold(
-      body: screens[index],
+      body: screens[currentIndex],
       bottomNavigationBar: NavigationBar(
-        selectedIndex: index,
-        onDestinationSelected: (i) => ref.read(bottomNavIndexProvider.notifier).state = i,
+        height: 72,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 1,
+        selectedIndex: currentIndex,
+        onDestinationSelected: (i) =>
+        ref.read(bottomNavIndexProvider.notifier).state = i,
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.chat_bubble_outline),
-            selectedIcon: Icon(Icons.chat_bubble),
+            icon: Icon(IconlyLight.chat),
+            selectedIcon: Icon(IconlyBold.chat),
             label: 'Chats',
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
+            icon: Icon(IconlyLight.profile),
+            selectedIcon: Icon(IconlyBold.profile),
             label: 'Profile',
           ),
         ],

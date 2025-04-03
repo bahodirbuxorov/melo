@@ -24,7 +24,6 @@ class AuthTextField extends ConsumerWidget {
     final authNotifier = ref.read(authControllerProvider.notifier);
 
     late final TextEditingController controller;
-
     if (isPassword) {
       controller = ref.watch(passwordControllerProvider);
     } else if (keyboardType == TextInputType.emailAddress) {
@@ -39,19 +38,8 @@ class AuthTextField extends ConsumerWidget {
       return IconlyLight.profile;
     }
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Sizes.borderRadiusLg),
-        boxShadow: [
-          BoxShadow(
-            color: (isDark ? AppColors.primary : AppColors.grey).withOpacity(0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: TextField(
         controller: controller,
         obscureText: isPassword,
@@ -65,9 +53,7 @@ class AuthTextField extends ConsumerWidget {
             authNotifier.setName(value);
           }
         },
-        style: TextStyle(
-          color: isDark ? AppColors.darkText : AppColors.lightText,
-        ),
+        style: Theme.of(context).textTheme.bodyMedium,
         decoration: InputDecoration(
           hintText: hint,
           prefixIcon: Icon(

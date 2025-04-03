@@ -7,7 +7,8 @@ class AppTheme {
   static ThemeData get light => ThemeData(
     brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.lightBackground,
-    primaryColor: AppColors.primary,
+    primarySwatch: AppColors.materialPrimary,
+    extensions: const [BrandColors.light],
     cardColor: AppColors.lightCard,
     textTheme: _textTheme(AppColors.lightText),
     elevatedButtonTheme: _elevatedButtonTheme(AppColors.primary),
@@ -28,7 +29,8 @@ class AppTheme {
   static ThemeData get dark => ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.darkBackground,
-    primaryColor: AppColors.primary,
+    primarySwatch: AppColors.materialPrimary,
+    extensions: const [BrandColors.dark],
     cardColor: AppColors.darkCard,
     textTheme: _textTheme(AppColors.darkText),
     elevatedButtonTheme: _elevatedButtonTheme(AppColors.primary),

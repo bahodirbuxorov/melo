@@ -3,16 +3,11 @@ import '../../domain/entities/message_entity.dart';
 
 class MessageModel extends MessageEntity {
   MessageModel({
-    required String id,
-    required String senderId,
-    required String text,
-    required DateTime sentAt,
-  }) : super(
-    id: id,
-    senderId: senderId,
-    text: text,
-    sentAt: sentAt,
-  );
+    required super.id,
+    required super.senderId,
+    required super.text,
+    required super.sentAt,
+  });
 
   factory MessageModel.fromMap(Map<String, dynamic> map, String docId) {
     final timestamp = map['timestamp'];
@@ -26,6 +21,7 @@ class MessageModel extends MessageEntity {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() => {
     'senderId': senderId,
     'text': text,

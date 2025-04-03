@@ -12,7 +12,7 @@ class LoginHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final _ = theme.brightness == Brightness.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,6 +35,7 @@ class LoginHeader extends StatelessWidget {
           style: GoogleFonts.urbanist(
             fontSize: 32,
             fontWeight: FontWeight.bold,
+            // ignore: deprecated_member_use
             color: theme.colorScheme.onBackground,
           ),
         ).animate().slideY(begin: 0.4).fadeIn(duration: 400.ms),
@@ -45,7 +46,8 @@ class LoginHeader extends StatelessWidget {
           AppStrings.loginSubtitle,
           style: GoogleFonts.urbanist(
             fontSize: 16,
-            color: theme.colorScheme.onBackground.withOpacity(0.8),
+            // ignore: deprecated_member_use
+            color: theme.colorScheme.onSurface.withOpacity(0.8),
           ),
         ).animate().fadeIn(duration: 500.ms, delay: 100.ms),
       ],

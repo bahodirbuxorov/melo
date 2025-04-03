@@ -1,14 +1,20 @@
+// chat_input_field.dart (with isTyping support)
+
+// ignore_for_file: deprecated_member_use
+
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:iconly/iconly.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
+// ignore: depend_on_referenced_packages
 import 'package:uuid/uuid.dart';
 
 import '../../../chat/domain/entities/message_entity.dart';
@@ -20,7 +26,11 @@ class ChatInputField extends ConsumerStatefulWidget {
   final String chatId;
   final String senderId;
 
-  const ChatInputField({super.key, required this.chatId, required this.senderId});
+  const ChatInputField({
+    super.key,
+    required this.chatId,
+    required this.senderId,
+  });
 
   @override
   ConsumerState<ChatInputField> createState() => _ChatInputFieldState();
@@ -30,6 +40,42 @@ class _ChatInputFieldState extends ConsumerState<ChatInputField> {
   final TextEditingController _controller = TextEditingController();
   final AudioRecorder _recorder = AudioRecorder();
   bool _isRecording = false;
+
+  Timer? _typingTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_onTyping);
+  }
+
+  void _onTyping() {
+    _setTyping(true);
+    _typingTimer?.cancel();
+    _typingTimer = Timer(const Duration(seconds: 2), () {
+      _setTyping(false);
+    });
+  }
+
+  Future<void> _setTyping(bool value) async {
+    final doc = FirebaseFirestore.instance
+        .collection('chats')
+        .doc(widget.chatId)
+        .collection('typing')
+        .doc(widget.senderId);
+
+    await doc.set({'isTyping': value}, SetOptions(merge: true));
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_onTyping);
+    _typingTimer?.cancel();
+    _setTyping(false); // Chatdan chiqishda isTyping false
+    _controller.dispose();
+    _recorder.dispose();
+    super.dispose();
+  }
 
   Future<void> _sendText() async {
     final text = _controller.text.trim();
@@ -45,6 +91,7 @@ class _ChatInputFieldState extends ConsumerState<ChatInputField> {
     await ref.read(messageRepoProvider).sendMessage(widget.chatId, message);
     _controller.clear();
     await _updateChat(message.text);
+    await _setTyping(false);
   }
 
   Future<void> _updateChat(String lastMessage) async {
@@ -104,25 +151,6 @@ class _ChatInputFieldState extends ConsumerState<ChatInputField> {
     await _updateChat('[image]');
   }
 
-  Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles();
-    if (result == null || result.files.single.path == null) return;
-
-    final file = File(result.files.single.path!);
-    final url = await _uploadFile(file, 'files');
-
-    final message = MessageEntity(
-      id: const Uuid().v4(),
-      senderId: widget.senderId,
-      text: '[file] ${result.files.single.name}',
-      sentAt: DateTime.now(),
-      mediaUrl: url,
-      mediaType: 'file',
-    );
-
-    await ref.read(messageRepoProvider).sendMessage(widget.chatId, message);
-    await _updateChat('[file]');
-  }
 
   Future<String> _uploadFile(File file, String folder) async {
     final name = p.basename(file.path);
@@ -138,10 +166,10 @@ class _ChatInputFieldState extends ConsumerState<ChatInputField> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: Sizes.p12, vertical: Sizes.p8),
       decoration: BoxDecoration(
-        color: isDark ? Colors.black : Colors.white,
+        color: isDark ? AppColors.darkCard : AppColors.lightCard,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 6,
             offset: const Offset(0, -2),
           ),
@@ -150,30 +178,30 @@ class _ChatInputFieldState extends ConsumerState<ChatInputField> {
       child: Row(
         children: [
           IconButton(
-            icon: Icon(_isRecording ? Icons.stop : IconlyLight.voice, color: Colors.grey),
+            icon: Icon(_isRecording ? Icons.stop : IconlyLight.voice, color: AppColors.grey),
             onPressed: _isRecording ? _stopRecordingAndSend : _startRecording,
           ),
           IconButton(
-            icon: const Icon(IconlyLight.image, color: Colors.grey),
+            icon: const Icon(IconlyLight.image, color: AppColors.grey),
             onPressed: _pickMedia,
           ),
-
           Expanded(
             child: TextField(
+              enabled: !_isRecording,
               controller: _controller,
-              style: TextStyle(color: isDark ? Colors.white : Colors.black),
+              style: TextStyle(color: isDark ? AppColors.darkText : AppColors.lightText),
               decoration: InputDecoration(
-                hintText: 'Xabar yozing...${_isRecording ? " (Yozilmoqda...)" : ""}',
-                hintStyle: TextStyle(color: Colors.grey.shade500),
+                hintText: _isRecording ? "Yozilmoqda..." : "Xabar yozing...",
+                hintStyle: TextStyle(color: AppColors.grey),
                 filled: true,
-                fillColor: isDark ? Colors.white12 : Colors.grey.shade100,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(Sizes.borderRadiusLg),
-                  borderSide: BorderSide.none,
-                ),
+                fillColor: isDark ? Colors.white10 : Colors.grey.shade100,
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: Sizes.p12,
                   horizontal: Sizes.p16,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusLg),
+                  borderSide: BorderSide.none,
                 ),
               ),
             ),

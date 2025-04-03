@@ -33,6 +33,7 @@ class RegisterHeader extends StatelessWidget {
           style: GoogleFonts.urbanist(
             fontSize: 28,
             fontWeight: FontWeight.bold,
+            // ignore: deprecated_member_use
             color: theme.colorScheme.onBackground,
           ),
         ).animate().slideY(begin: 0.3).fadeIn(duration: 400.ms),
@@ -43,6 +44,7 @@ class RegisterHeader extends StatelessWidget {
           'Let’s get you started.',
           style: GoogleFonts.urbanist(
             fontSize: 16,
+            // ignore: deprecated_member_use
             color: theme.colorScheme.onBackground.withOpacity(0.9),
           ),
         ).animate().fadeIn(duration: 500.ms, delay: 100.ms),

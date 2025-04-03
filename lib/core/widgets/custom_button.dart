@@ -27,8 +27,13 @@ class ReusableButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultGradient = const LinearGradient(
-      colors: [AppColors.primary, AppColors.secondary],
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final defaultGradient = LinearGradient(
+      colors: isDark
+          ? [AppColors.primary.withOpacity(0.9), AppColors.secondary.withOpacity(0.9)]
+          : [AppColors.primary, AppColors.secondary],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     );
@@ -46,7 +51,9 @@ class ReusableButton extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             gradient: effectiveGradient,
-            color: effectiveGradient == null ? Colors.grey.shade300 : null,
+            color: effectiveGradient == null
+                ? (isDark ? Colors.grey.shade800 : Colors.grey.shade300)
+                : null,
             borderRadius: BorderRadius.circular(borderRadius),
             boxShadow: [
               if (isEnabled)

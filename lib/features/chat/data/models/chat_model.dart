@@ -9,7 +9,7 @@ class ChatModel extends ChatEntity {
     required super.contactName,
     required super.contactAvatarUrl,
     required super.updatedAt,
-    required super.contactEmail,
+    required super.contactEmail, required super.members, required super.contactId,
   });
 
   factory ChatModel.fromMap(Map<String, dynamic> map, String docId) {
@@ -20,10 +20,11 @@ class ChatModel extends ChatEntity {
       contactAvatarUrl: map['contactAvatarUrl'] ?? '',
       contactEmail: map['contactEmail'] ?? '',
       // qo‘shildi
-      updatedAt: (map['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      updatedAt: (map['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(), members: [], contactId: '',
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'lastMessage': lastMessage,
