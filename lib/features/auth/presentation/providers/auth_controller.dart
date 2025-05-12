@@ -34,7 +34,7 @@ class AuthController extends Notifier<AuthState> {
       await _registerUseCase(
         state.email.trim(),
         state.password.trim(),
-        state.name.trim(), // ✅ Name ni uzatamiz
+        state.name.trim(),
       );
 
       final storage = ref.read(localStorageProvider);
@@ -53,7 +53,7 @@ class AuthController extends Notifier<AuthState> {
     try {
       await _loginUseCase(state.email.trim(), state.password.trim());
 
-      // ✅ Login muvaffaqiyatli bo‘lsa:
+
       final storage = ref.read(localStorageProvider);
       await storage.saveEmail(state.email.trim());
       await storage.setRememberMe(true);

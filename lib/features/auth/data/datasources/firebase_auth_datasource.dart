@@ -8,7 +8,6 @@ class FirebaseAuthDatasource {
 
   FirebaseAuthDatasource(this._auth, this._firestore);
 
-  /// 🔐 Login
   Future<void> login(String email, String password) async {
     final result = await _auth.signInWithEmailAndPassword(
       email: email,
@@ -26,7 +25,6 @@ class FirebaseAuthDatasource {
     }
   }
 
-  /// 🆕 Register
   Future<void> register(String email, String password, String name) async {
     final result = await _auth.createUserWithEmailAndPassword(
       email: email,
@@ -50,7 +48,7 @@ class FirebaseAuthDatasource {
     }
   }
 
-  /// 🔓 Logout
+
   Future<void> logout() async {
     final user = _auth.currentUser;
     if (user != null) {
@@ -65,10 +63,9 @@ class FirebaseAuthDatasource {
     await _auth.signOut();
   }
 
-  /// 👤 Auth holatini kuzatish
   Stream<User?> get user => _auth.authStateChanges();
 
-  /// ✅ Online statusni yangilash (App lifecycleda ishlatish mumkin)
+
   Future<void> updateUserPresence({required bool isOnline}) async {
     final user = _auth.currentUser;
     if (user != null) {
@@ -79,7 +76,6 @@ class FirebaseAuthDatasource {
     }
   }
 
-  /// ✍️ Typing statusni chat bo'yicha yangilash
   Future<void> updateTypingStatus({required String chatId, required bool isTyping}) async {
     final user = _auth.currentUser;
     if (user != null) {

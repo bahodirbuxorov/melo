@@ -75,5 +75,6 @@ class ChatListScreen extends ConsumerWidget {
         child: const Icon(IconlyLight.chat),
       ),
     );
+
   }
 }

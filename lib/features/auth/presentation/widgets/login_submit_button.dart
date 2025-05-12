@@ -7,37 +7,43 @@ import '../../../../core/widgets/shimmer.dart';
 import '../../../../core/widgets/snackbar.dart';
 import '../providers/auth_provider.dart';
 
-
 class LoginSubmitButton extends ConsumerWidget {
   const LoginSubmitButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authControllerProvider);
-    final authNotifier = ref.read(authControllerProvider.notifier);
+    final state = ref.watch(authControllerProvider);
+    final notifier = ref.read(authControllerProvider.notifier);
 
-    if (auth.isLoading) return const ReusableShimmerTile();
+    if (state.isLoading) return const ReusableShimmerTile();
 
-    final isEnabled = auth.email.isNotEmpty && auth.password.length >= 6;
+    final enabled = state.email.isNotEmpty && state.password.length >= 6;
 
     return ReusableButton(
       label: 'Sign In',
-      isEnabled: isEnabled,
-      onPressed: () async {
-        await authNotifier.login();
+      isEnabled: enabled,
+      onPressed: enabled
+          ? () async {
+        await notifier.login();
 
-        if (context.mounted) {
-          if (auth.errorMessage != null) {
-            TopSnackbar.show(
-              context,
-              message: auth.errorMessage!,
-              type: SnackbarType.error,
-            );
-          } else {
-            context.go(RouteNames.home);
-          }
+        if (!context.mounted) return;
+
+        final newState = ref.read(authControllerProvider);
+
+        if (newState.errorMessage != null) {
+
+          TopSnackbar.show(
+            context,
+            message: newState.errorMessage!,
+            type: SnackbarType.error,
+          );
+        } else {
+
+          context.go(RouteNames.home);
         }
-      },
+      }
+          : null,
     );
   }
 }
+

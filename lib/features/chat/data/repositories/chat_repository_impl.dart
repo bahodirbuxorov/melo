@@ -37,8 +37,21 @@ class FirebaseChatRepository implements ChatRepository {
         ));
       }
 
+
       return chats;
     });
+  }
+  @override
+  Future<void> deleteChat(String chatId) async {
+    final chatRef = firestore.collection('chats').doc(chatId);
+
+
+    final messagesSnapshot = await chatRef.collection('messages').get();
+    for (final doc in messagesSnapshot.docs) {
+      await doc.reference.delete();
+    }
+
+    await chatRef.delete();
   }
 
   @override

@@ -7,7 +7,6 @@ import '../../features/chat/presentation/screens/chat_detail_screen.dart';
 import '../../features/chat/presentation/screens/new_chat_screen.dart';
 import 'route_names.dart';
 
-/// ✅ Create router dynamically with custom initialLocation
 GoRouter createRouter({required String initialLocation}) {
   return GoRouter(
     initialLocation: initialLocation,
