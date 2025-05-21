@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:melo/features/auth/presentation/providers/auth_user_provider.dart';
 import '../../../../core/routing/route_names.dart';
-import '../../../auth/presentation/providers/auth_provider.dart'; // logout uchun (ixtiyoriy)
+// logout uchun (ixtiyoriy)
 import '../widgets/profile_app_bar.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_actions.dart';

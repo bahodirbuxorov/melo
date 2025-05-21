@@ -47,6 +47,7 @@ class ChatCard extends ConsumerWidget {
       },
       onDismissed: (_) async {
         await ref.read(chatRepositoryProvider).deleteChat(chat.id);
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Chat o‘chirildi')),
         );
@@ -58,6 +59,7 @@ class ChatCard extends ConsumerWidget {
           margin: const EdgeInsets.symmetric(vertical: Sizes.p8),
           padding: const EdgeInsets.symmetric(horizontal: Sizes.p16, vertical: Sizes.p12),
           decoration: BoxDecoration(
+            // ignore: deprecated_member_use
             color: theme.cardColor.withOpacity(0.95),
             borderRadius: BorderRadius.circular(Sizes.borderRadiusLg),
             boxShadow: [
@@ -97,7 +99,6 @@ class ChatCard extends ConsumerWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.bodySmall(context).copyWith(
-                        color: isDark ? Colors.white70 : Colors.black.withOpacity(0.6),
                       ),
                     ),
                   ],

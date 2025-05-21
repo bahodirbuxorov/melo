@@ -1,5 +1,6 @@
 /// Barcha async tayyorgarlik ishlarini bajarib,
 /// ProviderScope.overrides ro‘yxatini qaytaradi.
+library;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../notifications/notification_service.dart';

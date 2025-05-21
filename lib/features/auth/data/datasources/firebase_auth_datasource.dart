@@ -91,7 +91,7 @@ class FirebaseAuthDatasource {
     }
   }
 
-  /// 👀 Typing statusni stream sifatida olish
+  /// Typing statusni stream sifatida olish
   Stream<bool> getTypingStatus(String chatId, String userId) {
     return _firestore
         .collection('chats')
