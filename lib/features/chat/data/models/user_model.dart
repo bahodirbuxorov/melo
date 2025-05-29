@@ -9,7 +9,7 @@ class UserModel extends UserEntity {
     required super.email,
     required super.avatarUrl,
     required super.isOnline,
-    super.lastSeen,
+    super.lastSeen, required super.bio,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map, String docId) {
@@ -19,7 +19,7 @@ class UserModel extends UserEntity {
       email: map['email'] ?? '',
       avatarUrl: map['avatarUrl'] ?? '',
       isOnline: map['isOnline'] ?? false,
-      lastSeen: map['lastSeen'] != null ? (map['lastSeen'] as Timestamp).toDate() : null,
+      lastSeen: map['lastSeen'] != null ? (map['lastSeen'] as Timestamp).toDate() : null, bio: '',
     );
   }
 
@@ -29,7 +29,7 @@ class UserModel extends UserEntity {
       email: user.email,
       name: '',
       avatarUrl: '',
-      isOnline: false,
+      isOnline: false, bio: '',
     );
   }
 }

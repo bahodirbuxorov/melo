@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconly/iconly.dart';
 import 'package:melo/core/theme/theme_provider.dart';
 import 'package:melo/features/auth/presentation/providers/auth_provider.dart';
+import '../../../../core/routing/route_names.dart';
 import '../../../../core/widgets/custom_button.dart';
 
 class ProfileActions extends ConsumerWidget {
@@ -22,9 +23,9 @@ class ProfileActions extends ConsumerWidget {
             leading: const Icon(IconlyLight.edit),
             title: const Text("Edit Profile"),
             onTap: () {
-              // TODO: Navigate to edit profile screen
-              debugPrint("👤 Edit profile tapped");
+              context.push(RouteNames.editProfile);
             },
+
           ),
           ListTile(
             leading: const Icon(IconlyLight.chart),
@@ -32,11 +33,11 @@ class ProfileActions extends ConsumerWidget {
             trailing: Switch.adaptive(
               value: isDark,
               onChanged: (val) {
-                // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-                ref.read(themeModeProvider.notifier).state =
-                val ? ThemeMode.dark : ThemeMode.light;
+                final notifier = ref.read(themeModeProvider.notifier);
+                notifier.setTheme(val ? ThemeMode.dark : ThemeMode.light);
               },
             ),
+
           ),
           const Spacer(),
           Padding(

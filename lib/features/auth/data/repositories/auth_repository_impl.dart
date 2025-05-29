@@ -25,5 +25,11 @@ class AuthRepositoryImpl implements AuthRepository {
   Stream<UserEntity?> get user =>
       datasource.user.map((user) =>
       user != null ? UserModel.fromFirebaseUser(user) : null);
+
+  @override
+  Future<void> updateUserProfile({required String name, required String bio}) {
+    return datasource.updateUserProfile(name: name, bio: bio);
+  }
+
 }
 

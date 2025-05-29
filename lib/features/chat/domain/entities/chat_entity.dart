@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ChatEntity {
   final String id;
   final List<String> members;
-  final String contactId; // ✅ Qo‘shildi
+  final String contactId;
   final String contactName;
   final String contactEmail;
   final String contactAvatarUrl;
@@ -13,7 +13,7 @@ class ChatEntity {
   ChatEntity({
     required this.id,
     required this.members,
-    required this.contactId, // ✅ Qo‘shildi
+    required this.contactId,
     required this.contactName,
     required this.contactEmail,
     required this.contactAvatarUrl,
@@ -25,7 +25,7 @@ class ChatEntity {
     return ChatEntity(
       id: id,
       members: List<String>.from(map['members'] ?? []),
-      contactId: map['contactId'] ?? '', // ✅ Qo‘shildi
+      contactId: map['contactId'] ?? '',
       contactName: map['contactName'] ?? '',
       contactEmail: map['contactEmail'] ?? '',
       contactAvatarUrl: map['contactAvatarUrl'] ?? '',
@@ -34,10 +34,13 @@ class ChatEntity {
     );
   }
 
+
+  String get name => contactName;
+
   Map<String, dynamic> toMap() {
     return {
       'members': members,
-      'contactId': contactId, // ✅ Qo‘shildi
+      'contactId': contactId,
       'contactName': contactName,
       'contactEmail': contactEmail,
       'contactAvatarUrl': contactAvatarUrl,

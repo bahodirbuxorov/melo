@@ -1,10 +1,9 @@
-// lib/features/profile/presentation/screens/profile_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:melo/features/auth/presentation/providers/auth_user_provider.dart';
 import '../../../../core/routing/route_names.dart';
-// logout uchun (ixtiyoriy)
 import '../widgets/profile_app_bar.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_actions.dart';
@@ -26,14 +25,11 @@ class ProfileScreen extends ConsumerWidget {
       ),
 
       data: (user) {
-        // 🔁 Stream yangilandi, lekin foydalanuvchi topilmadi — login sahifasiga
-        if (user == null) {
-          // Logout qilishni ham istasangiz:
-          // ref.read(authControllerProvider.notifier).logout();
 
+        if (user == null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (context.canPop()) {
-              context.pop(); // stackda ortga qaytish
+              context.pop();
             }
             context.go(RouteNames.login);
           });
@@ -43,7 +39,6 @@ class ProfileScreen extends ConsumerWidget {
           );
         }
 
-        // ✔️ Foydalanuvchi bor
         return const SafeArea(
           child: Scaffold(
             appBar: PreferredSize(

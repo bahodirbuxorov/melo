@@ -101,4 +101,19 @@ class FirebaseAuthDatasource {
         .snapshots()
         .map((snap) => snap.data()?['isTyping'] ?? false);
   }
+
+
+  Future<void> updateUserProfile({
+    required String name,
+    required String bio,
+  }) async {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) throw Exception('User not logged in');
+
+    await _firestore.collection('users').doc(uid).update({
+      'name': name,
+      'bio': bio,
+    });
+  }
+
 }

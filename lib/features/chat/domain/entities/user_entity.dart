@@ -5,6 +5,7 @@ class UserEntity {
   final String avatarUrl;
   final bool isOnline;
   final DateTime? lastSeen;
+  final String bio;
 
   UserEntity({
     required this.uid,
@@ -13,5 +14,6 @@ class UserEntity {
     required this.avatarUrl,
     required this.isOnline,
     this.lastSeen,
+    required this.bio,
   });
 }

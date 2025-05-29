@@ -7,4 +7,5 @@ abstract class RouteNames {
   static const home = '/home';
   static const chatDetail = '/chat-detail';
   static const newChat = '/new-chat';
+  static const editProfile = '/edit-profile';
 }

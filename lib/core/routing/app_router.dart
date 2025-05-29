@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:melo/core/routing/root_nav_screen.dart';
 import 'package:melo/features/auth/presentation/screens/register_screen.dart';
 import 'package:melo/features/auth/presentation/screens/login_screen.dart';
+import 'package:melo/features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/chat/domain/entities/chat_entity.dart';
 import '../../features/chat/presentation/screens/chat_detail_screen.dart';
 import '../../features/chat/presentation/screens/new_chat_screen.dart';
@@ -24,6 +25,10 @@ GoRouter createRouter({required String initialLocation}) {
         builder: (context, state) => const RootNavScreen(),
       ),
       GoRoute(
+        path: RouteNames.editProfile,
+        builder: (context, state) => const EditProfileScreen(),
+      ),
+      GoRoute(
         path: RouteNames.newChat,
         builder: (context, state) => const NewChatScreen(),
       ),
@@ -34,6 +39,7 @@ GoRouter createRouter({required String initialLocation}) {
           return ChatDetailScreen(chat: chat);
         },
       ),
+
       GoRoute(
         path: '/chat-detail/:id',
         builder: (context, state) {

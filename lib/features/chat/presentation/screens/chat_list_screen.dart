@@ -11,14 +11,38 @@ import '../../domain/entities/chat_entity.dart';
 import '../provider/chat_providers.dart';
 import '../widgets/chat_card.dart';
 
-class ChatListScreen extends ConsumerWidget {
+import '../widgets/search_bar.dart'; // renamed and imported
+
+final chatSearchQueryProvider = StateProvider<String>((ref) => '');
+
+class ChatListScreen extends ConsumerStatefulWidget {
   const ChatListScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ChatListScreen> createState() => _ChatListScreenState();
+}
+
+class _ChatListScreenState extends ConsumerState<ChatListScreen> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    final initialQuery = ref.read(chatSearchQueryProvider);
+    _controller = TextEditingController(text: initialQuery);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final chatListAsync = ref.watch(chatListProvider);
+    final query = ref.watch(chatSearchQueryProvider);
     final theme = Theme.of(context);
-    final _ = theme.brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
@@ -31,41 +55,62 @@ class ChatListScreen extends ConsumerWidget {
         decoration: const BoxDecoration(gradient: AppGradients.main),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: Sizes.p16),
-          child: chatListAsync.when(
-            loading: () => ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: Sizes.p16),
-              itemCount: 6,
-              separatorBuilder: (_, __) => const SizedBox(height: Sizes.p12),
-              itemBuilder: (_, __) => const ReusableShimmerTile(),
-            ),
-            error: (err, _) => Center(
-              child: Text(
-                'Xatolik: $err',
-                style: AppTextStyles.bodySmall(context),
+          child: Column(
+            children: [
+              const SizedBox(height: Sizes.p16),
+
+              ChatSearchBar(
+                controller: _controller,
+                hintText: 'Chat nomini yozing...',
+                onChanged: (val) =>
+                ref.read(chatSearchQueryProvider.notifier).state = val,
               ),
-            ),
-            data: (List<ChatEntity> chats) {
-              if (chats.isEmpty) {
-                return Center(
-                  child: Text(
-                    'Hech qanday chat mavjud emas.',
-                    style: AppTextStyles.bodySmall(context).copyWith(
-                      fontWeight: FontWeight.w500,
+
+              const SizedBox(height: Sizes.p16),
+
+              Expanded(
+                child: chatListAsync.when(
+                  loading: () => ListView.separated(
+                    itemCount: 6,
+                    separatorBuilder: (_, __) => const SizedBox(height: Sizes.p12),
+                    itemBuilder: (_, __) => const ReusableShimmerTile(),
+                  ),
+                  error: (err, _) => Center(
+                    child: Text(
+                      'Xatolik: $err',
+                      style: AppTextStyles.bodySmall(context),
                     ),
                   ),
-                );
-              }
+                  data: (List<ChatEntity> chats) {
+                    final filteredChats = chats
+                        .where((chat) =>
+                        chat.name.toLowerCase().contains(query.toLowerCase()))
+                        .toList();
 
-              return ListView.separated(
-                padding: const EdgeInsets.symmetric(vertical: Sizes.p16),
-                itemCount: chats.length,
-                separatorBuilder: (_, __) => const SizedBox(height: Sizes.p12),
-                itemBuilder: (context, index) {
-                  final chat = chats[index];
-                  return ChatCard(chat: chat);
-                },
-              );
-            },
+                    if (filteredChats.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'Chat topilmadi.',
+                          style: AppTextStyles.bodySmall(context).copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return ListView.separated(
+                      itemCount: filteredChats.length,
+                      separatorBuilder: (_, __) =>
+                      const SizedBox(height: Sizes.p12),
+                      itemBuilder: (context, index) {
+                        final chat = filteredChats[index];
+                        return ChatCard(chat: chat);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -75,6 +120,5 @@ class ChatListScreen extends ConsumerWidget {
         child: const Icon(IconlyLight.chat),
       ),
     );
-
   }
 }
